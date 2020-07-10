@@ -1,26 +1,25 @@
 const express = require("express");
-const userSchema = require("./schema");
-const { response } = require("express");
+const userModel = require("./schema");
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const userList = await userSchema.find({});
+    const userList = await userModel.find({});
     res.send(userList);
   } catch (error) {}
 });
 
 router.get("/:id", async (req, res) => {
   try {
-    const user = await userSchema.findById(req.params.id);
+    const user = await userModel.findById(req.params.id);
     res.send(user);
   } catch (error) {}
 });
 
 router.post("/", async (req, res) => {
   try {
-    const newUser = new userSchema(req.body);
+    const newUser = new userModel(req.body);
     const response = await newUser.save();
     res.send(response);
   } catch (error) {
@@ -30,17 +29,14 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
-    const response = await userSchema.findByIdAndUpdate(
-      req.params.id,
-      req.body
-    );
+    const response = await userModel.findByIdAndUpdate(req.params.id, req.body);
     res.send("Updated successfully");
   } catch (error) {}
 });
 
 router.delete("/:id", async (res, req) => {
   try {
-    await userSchema.findByIdAndDelete(req.params.id);
+    await userModel.findByIdAndDelete(req.params.id);
     res.send("deleted");
   } catch (error) {}
 });
