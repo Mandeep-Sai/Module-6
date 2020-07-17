@@ -4,6 +4,8 @@ import { MdEdit } from "react-icons/md";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { IconContext } from "react-icons";
 import Review from "./Review";
+
+const link = "";
 class Details extends Component {
   constructor(props) {
     super(props);
@@ -11,12 +13,18 @@ class Details extends Component {
     this.state = {
       product: {},
       reviews: {},
+      imagedata: "",
     };
   }
   componentDidMount = async () => {
     let response = await fetch(
       "http://localhost:3006/products/" + this.props.match.params.id
     );
+    let imageResponse = await fetch(
+      "http://localhost:3006/products/product/getImage"
+    );
+    let image = await imageResponse.json();
+    this.setState({ imagedata: image.image.data });
     let productObj = await response.json();
     this.setState({ product: productObj });
   };
@@ -37,9 +45,11 @@ class Details extends Component {
     // this.props.history.push(`http://localhost:3006/products/${id}/exportToPDF`);
     window.location.href = `http://localhost:3006/products/${id}/exportToPDF`;
   };
+  //link = `data:image/jpeg;base64,${this.state.imagedata}`;
   render() {
     return (
       <Container fluid style={{ height: "85vh" }}>
+        <img src={`data:image/jpeg;base64,${this.state.imagedata}`} alt="" />
         <Container className="details">
           <Row className="row-cols-2 justify-content-center">
             <Col xs={4}>

@@ -13,6 +13,7 @@ const swaggerDocument = YAML.load(join(__dirname, "./apiDesc.yml"));
 const productsRoute = require("./services/products");
 const reviewsRoutes = require("./services/reviews");
 const imagesRoutes = require("./services/images");
+const cartRoutes = require("./services/carts");
 const server = express();
 server.use(cors());
 server.use(express.json());
@@ -22,6 +23,7 @@ server.use("/products", productsRoute);
 console.log(join(__dirname, "./apiDesc.yml"));
 server.use("/reviews", reviewsRoutes);
 server.use("/images", imagesRoutes);
+server.use("/carts", cartRoutes);
 server.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 mongoose
   .connect("mongodb://localhost:27017/amazon", {

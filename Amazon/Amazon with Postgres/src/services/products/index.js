@@ -2,7 +2,9 @@ const express = require("express");
 const productModel = require("./schema");
 const q2m = require("query-to-mongo");
 const db = require("../db");
+const multer = require("multer");
 
+const upload = multer({});
 //
 
 //
@@ -51,6 +53,13 @@ router.get("/:id", async (req, res) => {
   res.send(response.rows[0]);
 });
 
+router.get("/product/getImage", async (req, res) => {
+  const response = await db.query(`SELECT * FROM images where _id = 1`);
+  let data = response.rows[0];
+  res.send(response.rows[0]);
+  // let image = data.encode.toString();
+});
+
 router.post("/", async (req, res) => {
   console.log(req.body);
   const response = await db.query(
@@ -68,6 +77,15 @@ router.post("/", async (req, res) => {
   );
   //console.log(response);
   res.send(response.rows[0]);
+});
+
+router.post("/:id/uploadImage", upload.single("pic"), async (req, res) => {
+  const picture = req.file;
+  const response = await db.query(
+    `INSERT INTO images (productid,image) Values ($1,bytea('${req.file}'))`,
+    [req.params.id]
+  );
+  res.send("ok");
 });
 
 router.put("/:id", async (req, res) => {
