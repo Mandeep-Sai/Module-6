@@ -8,7 +8,7 @@ router.get("/:productid", async (req, res) => {
     `SELECT name, brand, price as unitary_price, COUNT(*) As quantity, COUNT(*) * price as total
                                      FROM carts JOIN products ON carts.productid = products._id
                                      WHERE productid = $1
-                                     GROUP BY products.name
+                                     GROUP BY name,brand,price
                                      `,
     [req.params.productid]
   );
